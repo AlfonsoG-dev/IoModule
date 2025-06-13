@@ -1,0 +1,4 @@
+Source-Path: src\application
+Class-Path: bin
+Main-Class: IoModule
+Libraries: 
