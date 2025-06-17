@@ -39,7 +39,7 @@ java -jar IoModule.jar
 ---
 
 ## Usage
-There are CLI options to list files from the source of the `mysql JDB` library.
+There are CLI options to list files from the source of the `mysql JDBC` library.
 1. List by using the `Runnable` implementation.
 ```sh
 java -jar IoModule.jar r
