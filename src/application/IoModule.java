@@ -4,7 +4,7 @@ class IoModule {
     public static void main(String[] args) {
         String localPath = "." + File.separator;
         FileOperations fo = new FileOperations(localPath);
-        var callableList = fo.asyncListFiles(localPath + "src");
+        var callableList = fo.getCallableListOfFiles(localPath + "src");
         try {
             callableList
                 .call()
