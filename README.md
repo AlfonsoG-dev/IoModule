@@ -1,6 +1,6 @@
 # IO module
-Its a project to test and try different ways to manipulate or interact with the file system using java API.
-- Also starting this project i plan to integrate the file interaction with multithread. 
+A simple project to study and try different ways to manage files using the Java API.
+- Also, i plan to integrate multithread operations.
 
 ## References
 - [Java API docs](https://download.java.net/java/early_access/valhalla/docs/api/)
