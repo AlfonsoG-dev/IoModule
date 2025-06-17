@@ -17,7 +17,7 @@ public class FileOperations {
     public FileOperations(String localPath) {
         this.localPath = localPath;
     }
-    public List<Path> getDirectoryFiles(String dirPath) {
+    public synchronized List<Path> getDirectoryFiles(String dirPath) {
         List<Path> files = new ArrayList<>();
         try {
             files = Files.walk(Paths.get(dirPath),  FileVisitOption.FOLLOW_LINKS)
@@ -51,13 +51,7 @@ public class FileOperations {
     public Callable<List<Path>> getCallableListOfFiles(String dirPath) {
         return new Callable<List<Path>>() {
             public List<Path> call() {
-                List<Path> files = new ArrayList<>();
-                try {
-                    files.addAll(getDirectoryFiles(dirPath));
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                return files;
+                return getDirectoryFiles(dirPath);
             }
         };
     }
