@@ -1,16 +1,18 @@
 package operations;
+
 import java.util.List;
 
 import java.nio.file.Path;
 
+import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutionException;
 
 public class ExecutorOperation {
-    public void executeRunnableList(Runnable r, List<Path> result) {
+    public void executeRunnable(Runnable r, List<Path> result) {
         FutureTask<List<Path>> futureRunnableTask = new FutureTask<>(r, result);
 
         if(!futureRunnableTask.isCancelled()) {
@@ -30,7 +32,7 @@ public class ExecutorOperation {
             e.printStackTrace();
         }
     }
-    public void executeCallableList(Callable<List<Path>> c) {
+    public void executeCallable(Callable<List<Path>> c) {
         FutureTask<List<Path>> futureCallableList = new FutureTask<>(c);
 
         if(!futureCallableList.isCancelled()) {
@@ -55,7 +57,7 @@ public class ExecutorOperation {
         }
 
     }
-    public void executorCallableList(Callable<List<Path>> c) {
+    public void executorOfCallable(Callable<List<Path>> c) {
         FutureTask<List<Path>> futureCallableList = new FutureTask<>(c);
         try(ExecutorService e = Executors.newSingleThreadExecutor()) {
             e.submit(futureCallableList);
@@ -72,4 +74,35 @@ public class ExecutorOperation {
             e.printStackTrace();
         }
     }
+    public void executorOfCallableList(List<Callable<List<Path>>> taskList) {
+        try(ExecutorService e = Executors.newCachedThreadPool()) {
+
+            List<Future<List<Path>>> futures = e.invokeAll(taskList);
+            System.out.println("Starting computation");
+
+            // Process the results as each future completes
+            for (Future<List<Path>> future : futures) {
+                try {
+                    // Wait for and get the result (this blocks until the task finishes)
+                    List<Path> result = future.get();
+
+                    // Output the results
+                    System.out.println("\t[Info] Showing results...");
+                    for (Path path : result) {
+                        System.out.println(path);
+                    }
+                } catch (ExecutionException ex) {
+                    System.err.println("Task failed with an exception: " + ex.getCause());
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    System.err.println("Task was interrupted");
+                }
+            }
+        } catch (InterruptedException ex) {
+            // Handle case where the entire operation is interrupted
+            Thread.currentThread().interrupt();
+            System.err.println("Execution was interrupted");
+        }
+    }
+    
 }
