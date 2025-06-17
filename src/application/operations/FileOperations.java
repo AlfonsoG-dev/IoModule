@@ -40,6 +40,13 @@ public class FileOperations {
         }
         return names;
     }
+    public Callable<List<Path>> getCallableListOfDirNames(String dirPath) {
+        return new Callable<List<Path>>() {
+            public List<Path> call() {
+                return getDirectoryNames(dirPath).stream().map(p -> p.toPath()).toList();
+            }
+        };
+    }
     public Callable<List<Path>> getCallableListOfFiles(String dirPath) {
         return new Callable<List<Path>>() {
             public List<Path> call() {
