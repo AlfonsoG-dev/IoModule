@@ -10,14 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.FileVisitOption;
 
-import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
 
 public class FileOperations {
-    private String localPath;
-    public FileOperations(String localPath) {
-        this.localPath = localPath;
-    }
     public List<Path> getDirectoryFiles(String dirPath) {
         List<Path> files = new ArrayList<>();
         try {

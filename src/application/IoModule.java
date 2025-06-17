@@ -1,7 +1,6 @@
 import operations.FileOperations;
 import operations.ExecutorOperation;
 
-import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
 import java.nio.file.Path;
@@ -9,12 +8,11 @@ import java.nio.file.Paths;
 
 public class IoModule {
     public static void main(String[] args) {
-        String localPath = "." + File.separator;
-        FileOperations fo = new FileOperations(localPath);
+        FileOperations fo = new FileOperations();
         String searchPath = "D:/Descargas/dependencies/mysql-connector-j-9.1.0/";
         List<Path> files = new ArrayList<>();
 
-        ExecutorOperation ep = new ExecutorOperation(localPath);
+        ExecutorOperation ep = new ExecutorOperation();
 
         for(int i=0; i<args.length; ++i) {
             switch(args[i]) {

@@ -1,6 +1,5 @@
 package operations;
 import java.util.List;
-import java.util.ArrayList;
 
 import java.nio.file.Path;
 
@@ -11,11 +10,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutionException;
 
 public class ExecutorOperation {
-    private String localPath;
-    public ExecutorOperation(String localPath) {
-        this.localPath = localPath;
-    }
-
     public void executeRunnableList(Runnable r, List<Path> result) {
         FutureTask<List<Path>> futureRunnableTask = new FutureTask<>(r, result);
 
