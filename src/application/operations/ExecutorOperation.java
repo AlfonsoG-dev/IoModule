@@ -83,13 +83,16 @@ public class ExecutorOperation {
             // Process the results as each future completes
             for (Future<List<Path>> future : futures) {
                 try {
-                    // Wait for and get the result (this blocks until the task finishes)
-                    List<Path> result = future.get();
-
-                    // Output the results
-                    System.out.println("\t[Info] Showing results...");
-                    for (Path path : result) {
-                        System.out.println(path);
+                    if(future.isDone()) {
+                        System.out.println("\t[Info] Wait for results...");
+                        // Wait for and get the result (this blocks until the task finishes)
+                        List<Path> result = future.get();
+    
+                        // Output the results
+                        System.out.println("\t[Info] Showing results...");
+                        for (Path path : result) {
+                            System.out.println(path);
+                        }
                     }
                 } catch (ExecutionException ex) {
                     System.err.println("Task failed with an exception: " + ex.getCause());
