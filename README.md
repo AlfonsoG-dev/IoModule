@@ -42,15 +42,21 @@ java -jar IoModule.jar
 There are CLI options to list files from the source of the `mysql JDBC` library.
 1. List by using the `Runnable` implementation.
 ```sh
-java -jar IoModule.jar r
+java -jar IoModule.jar --r
 ```
 2. List by using the `Callable` implementation.
 ```sh
-java -jar IoModule.jar c
+java -jar IoModule.jar --c
 ```
 3. List by using the `Callable` in asynchronous manner
 ```sh
-java -jar IoModule.jar ec
+java -jar IoModule.jar --ec
+```
+4. List by using the `Callable List` in asynchronous manner.
+> This is performed by passing two list of the type `Callable<List<Path>>`
+>- It shows the list of files and the list of directories inside the `mysql JDBC` library
+```sh
+java -jar IoModule.jar --lc
 ```
 
 Lastly you can see the options by using:
