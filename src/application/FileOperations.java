@@ -17,13 +17,11 @@ public class FileOperations {
     public FileOperations(String localPath) {
         this.localPath = localPath;
     }
-    public synchronized List<Path> getDirectoryFiles(String dirPath) {
+    public List<Path> getDirectoryFiles(String dirPath) {
         List<Path> files = new ArrayList<>();
         try {
-            files = Files.walk(Paths.get(dirPath),  FileVisitOption.FOLLOW_LINKS)
-                .map(p -> p.toFile())
-                .filter(p -> p.isFile())
-                .map(p -> p.toPath())
+            files = Files.walk(Paths.get(dirPath), FileVisitOption.FOLLOW_LINKS)
+                .filter(Files::isRegularFile)
                 .toList();
         } catch(Exception e) {
             e.printStackTrace();
@@ -31,11 +29,8 @@ public class FileOperations {
         return files;
     }
     public int countFiles(File f) {
-        int c = 0;
-        if(f.listFiles() != null) {
-            c = f.listFiles().length;
-        }
-        return c;
+        File[] files = f.listFiles();
+        return (files != null) ? files.length : 0;
     }
     public List<File> getDirectoryNames(String dirPath) {
         List<File> names = new ArrayList<>();
@@ -45,6 +40,7 @@ public class FileOperations {
                 .filter(p -> p.isDirectory() && countFiles(p) > 0)
                 .toList();
         } catch(Exception e) {
+            e.printStackTrace();
         }
         return names;
     }
@@ -52,6 +48,20 @@ public class FileOperations {
         return new Callable<List<Path>>() {
             public List<Path> call() {
                 return getDirectoryFiles(dirPath);
+            }
+        };
+    }
+    public Runnable runnableListFiles(Path dir, List<Path> files) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Files.walk(dir, FileVisitOption.FOLLOW_LINKS)
+                        .filter(Files::isRegularFile)
+                        .forEach(p -> files.add(p));
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
     }
