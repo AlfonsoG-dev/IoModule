@@ -1,15 +1,18 @@
 # IO module
 Its a project to test and try different ways to manipulate or interact with the file system using java API.
+- Also starting this project i plan to integrate the file interaction with multithread. 
 
-# References
+## References
 - [Java API docs](https://download.java.net/java/early_access/valhalla/docs/api/)
 
-# Dependencies
+## Dependencies
 - [Java JDK](https://www.oracle.com/java/technologies/downloads/)
 - [custom build tool](https://github.com/AlfonsoG-dev/javaBuild)
 - [custom file system operations](https://github.com/AlfonsoG-dev/filesManager)
 
-# Usage
+---
+
+## Installation
 
 1. Clone the repository
 ```sh
@@ -32,6 +35,30 @@ java -jarJavaBuild.jar --build
 ```sh
 java -jar IoModule.jar
 ```
+
+---
+
+## Usage
+There are CLI options to list files from the source of the `mysql JDB` library.
+1. List by using the `Runnable` implementation.
+```sh
+java -jar IoModule.jar r
+```
+2. List by using the `Callable` implementation.
+```sh
+java -jar IoModule.jar c
+```
+3. List by using the `Callable` in asynchronous manner
+```sh
+java -jar IoModule.jar ec
+```
+
+Lastly you can see the options by using:
+```sh
+java -jar IoModule.jar --h
+```
+
+---
 
 # Disclaimer
 - This project is for educational purposes.
