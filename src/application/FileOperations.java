@@ -9,6 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.FileVisitOption;
 
+import java.util.concurrent.Future;
+import java.util.concurrent.Callable;
+
 public class FileOperations {
     private String localPath;
     public FileOperations(String localPath) {
@@ -18,6 +21,9 @@ public class FileOperations {
         List<Path> files = new ArrayList<>();
         try {
             files = Files.walk(Paths.get(dirPath),  FileVisitOption.FOLLOW_LINKS)
+                .map(p -> p.toFile())
+                .filter(p -> p.isFile())
+                .map(p -> p.toPath())
                 .toList();
         } catch(Exception e) {
             e.printStackTrace();
@@ -41,6 +47,19 @@ public class FileOperations {
         } catch(Exception e) {
         }
         return names;
+    }
+    public Callable<List<Path>> getCallableListOfFiles(String dirPath) {
+        return new Callable<List<Path>>() {
+            public List<Path> call() {
+                List<Path> files = new ArrayList<>();
+                try {
+                    files.addAll(getDirectoryFiles(dirPath));
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                return files;
+            }
+        };
     }
 }
 

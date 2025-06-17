@@ -1,10 +1,17 @@
 import java.io.File;
+import java.util.concurrent.Future;
 class IoModule {
     public static void main(String[] args) {
         String localPath = "." + File.separator;
         FileOperations fo = new FileOperations(localPath);
-        fo.getDirectoryNames("D:/Descargas/dependencies/mysql-connector-j-9.1.0/src/build/")
+        var callableList = fo.asyncListFiles(localPath + "src");
+        try {
+            callableList
+                .call()
                 .stream()
                 .forEach(System.out::println);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }
