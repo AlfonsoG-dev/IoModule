@@ -42,9 +42,13 @@ public class ExecutorOperation {
             System.out.println("Waiting to get the result...");
             if(futureCallableList.isDone()) {
                 System.out.println("Done computation showing results");
-                result
-                    .stream()
-                    .forEach(System.out::println);
+                if(result.size() == 0) {
+                    System.out.println("[Info] Empty directory");
+                } else {
+                    result
+                        .stream()
+                        .forEach(System.out::println);
+                }
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -53,10 +57,9 @@ public class ExecutorOperation {
     }
     public void executorCallableList(Callable<List<Path>> c) {
         FutureTask<List<Path>> futureCallableList = new FutureTask<>(c);
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(futureCallableList);
-        System.out.println("Starting computation");
-        try {
+        try(ExecutorService e = Executors.newSingleThreadExecutor()) {
+            e.submit(futureCallableList);
+            System.out.println("Starting computation");
             // Esperar a que la tarea se complete
             List<Path> result = futureCallableList.get();
             System.out.println("Waiting to get the results...");
@@ -67,8 +70,6 @@ public class ExecutorOperation {
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-        } finally {
-            executor.shutdown();
         }
     }
 }
