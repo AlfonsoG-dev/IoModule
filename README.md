@@ -58,6 +58,10 @@ java -jar IoModule.jar --ec
 ```sh
 java -jar IoModule.jar --lc
 ```
+5. List file lines by using the `Callable`.
+```sh
+java -jar IoModule.jar --rfl
+```
 
 Lastly you can see the options by using:
 ```sh

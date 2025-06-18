@@ -34,12 +34,16 @@ public class IoModule {
                     callables.add(fo.getCallableListOfDirNames(searchPath));
                     ep.executorOfCallableList(callables);
                 break;
+                case "--rfl":
+                    ep.executorOfCallable(fo.getCallableFileLines("src/application/IoModule.java"));
+                break;
                 case "--h":
                     System.out.println("Using the directory | " + searchPath + " |");
                     System.out.println("Use --r to get the list of files by Runnable");
                     System.out.println("Use --c to get the list of files by Callable");
                     System.out.println("Use --ec to get the list of files by Callable in Asynchronous");
                     System.out.println("Use --lc to get the computation of two callables");
+                    System.out.println("Use --rfl to get the file lines of one file");
                 break;
                 default: 
                     System.out.println("use --h for help");
