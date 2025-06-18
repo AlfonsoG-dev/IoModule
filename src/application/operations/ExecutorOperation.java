@@ -8,8 +8,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ExecutionException;
+
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
 
 public class ExecutorOperation {
     public<T> void executeRunnable(Runnable r, List<T> result) {
@@ -107,5 +111,32 @@ public class ExecutorOperation {
             System.err.println("Execution was interrupted");
         }
     }
-    
+    public<T> T completionOfCallable(Callable<T> task) {
+        // TODO: search on how to shutdown this process.
+        T t = null;
+        CompletionService<T> c = new ExecutorCompletionService<>(Executors.newSingleThreadExecutor());
+        Future<T> futureResult = null;
+        try {
+            c.submit(task);
+            System.out.println("Starting computation");
+            futureResult = c.take();
+            try {
+                if(futureResult.isDone()) {
+                    System.out.println("Wait for results...");
+                    t = futureResult.get();
+                }
+            } catch(ExecutionException e) {
+                System.err.println("[Error] Execution fail");
+                e.printStackTrace();
+            }
+        } catch(InterruptedException e) {
+            System.err.println("[Error] Execution interrupted");
+            e.printStackTrace();
+        } finally {
+            if(futureResult != null) {
+                futureResult.cancel(true);
+            }
+        }
+        return t;
+    }
 }
