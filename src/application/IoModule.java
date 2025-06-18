@@ -35,7 +35,9 @@ public class IoModule {
                     ep.executorOfCallableList(callables);
                 break;
                 case "--rfl":
-                    ep.executorOfCallable(fo.getCallableFileLines("src/application/IoModule.java"));
+                    ep.completionOfCallable(fo.getCallableFileLines("src/application/IoModule.java"))
+                        .stream()
+                        .forEach(System.out::println);
                 break;
                 case "--h":
                     System.out.println("Using the directory | " + searchPath + " |");
