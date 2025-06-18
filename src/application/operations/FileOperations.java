@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.FileReader;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -65,6 +68,26 @@ public class FileOperations {
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
+            }
+        };
+    }
+    public List<String> getFileLines(String filePath) {
+        List<String> lines = new ArrayList<>();
+        try(BufferedReader reader = new BufferedReader(new FileReader(new File(filePath)))) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
+    public Callable<List<String>> getCallableFileLines(String filePath) {
+        return new Callable<>() {
+            @Override
+            public List<String> call() {
+                return getFileLines(filePath);
             }
         };
     }
