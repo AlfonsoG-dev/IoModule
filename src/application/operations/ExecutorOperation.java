@@ -26,7 +26,7 @@ public class ExecutorOperation {
         try {
             futureRunnableTask.get();
             System.out.println("Waiting to get the result...");
-            if(futureRunnableTask.isDone()) {
+            if(result.size() > 0) {
                 System.out.println("Done computation showing results");
                 result
                     .stream()
@@ -46,15 +46,11 @@ public class ExecutorOperation {
         try {
             List<T> result = futureCallableList.get();
             System.out.println("Waiting to get the result...");
-            if(futureCallableList.isDone()) {
+            if(result.size() == 0) {
                 System.out.println("Done computation showing results");
-                if(result.size() == 0) {
-                    System.out.println("[Info] Empty directory");
-                } else {
-                    result
-                        .stream()
-                        .forEach(System.out::println);
-                }
+                result
+                    .stream()
+                    .forEach(System.out::println);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -69,7 +65,7 @@ public class ExecutorOperation {
             // Esperar a que la tarea se complete
             List<T> result = futureCallableList.get();
             System.out.println("Waiting to get the results...");
-            if(futureCallableList.isDone()) {
+            if(result.size() > 0) {
                 System.out.println("Done computation showing results");
                 result
                     .forEach(System.out::println);
@@ -91,7 +87,6 @@ public class ExecutorOperation {
                         System.out.println("\t[Info] Wait for results...");
                         // Wait for and get the result (this blocks until the task finishes)
                         List<T> result = future.get();
-    
                         // Output the results
                         System.out.println("\t[Info] Showing results...");
                         for (T r : result) {
