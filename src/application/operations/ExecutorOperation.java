@@ -107,9 +107,10 @@ public class ExecutorOperation {
         }
     }
     public<T> T completionOfCallable(Callable<T> task) {
-        // TODO: search on how to shutdown this process.
+        // FIXME: search on how to shutdown this process.
+        // apparently use this kind of methods to process a list of Callable tasks.
         T t = null;
-        CompletionService<T> c = new ExecutorCompletionService<>(Executors.newSingleThreadExecutor());
+        CompletionService<T> c = new ExecutorCompletionService<>(Executors.newFixedThreadPool(1));
         Future<T> futureResult = c.submit(task);
         try {
             System.out.println("[Info] Starting computation");
@@ -129,9 +130,7 @@ public class ExecutorOperation {
             System.err.println("[Error] Execution interrupted");
             e.printStackTrace();
         } finally {
-            if(futureResult != null) {
-                futureResult.cancel(true);
-            }
+            futureResult.cancel(true);
         }
         return t;
     }
