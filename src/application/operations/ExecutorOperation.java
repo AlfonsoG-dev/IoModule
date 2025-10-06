@@ -2,12 +2,12 @@ package operations;
 
 import java.util.List;
 
-import java.nio.file.Path;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.Future.State;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ExecutionException;
@@ -110,14 +110,15 @@ public class ExecutorOperation {
         // TODO: search on how to shutdown this process.
         T t = null;
         CompletionService<T> c = new ExecutorCompletionService<>(Executors.newSingleThreadExecutor());
-        Future<T> futureResult = null;
+        Future<T> futureResult = c.submit(task);
         try {
-            c.submit(task);
-            System.out.println("Starting computation");
-            futureResult = c.take();
+            System.out.println("[Info] Starting computation");
             try {
-                if(futureResult.isDone()) {
-                    System.out.println("Wait for results...");
+                if(futureResult.state() == State.RUNNING) {
+                    System.out.println("[Info] Waiting for results");
+                    c.take();
+                }
+                if(futureResult.state() == State.SUCCESS) {
                     t = futureResult.get();
                 }
             } catch(ExecutionException e) {
