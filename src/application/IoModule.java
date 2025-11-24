@@ -17,7 +17,6 @@ public class IoModule {
 
     public static void main(String[] args) {
         FileOperations fo = new FileOperations();
-        String searchPath = args.length == 1 ? args[0] : "D:/Descargas/dependencies/mysql-connector-j-9.1.0/";
         List<Path> files = new ArrayList<>();
         List<Callable<List<Path>>> callables = new ArrayList<>();
 
@@ -26,17 +25,17 @@ public class IoModule {
         for(int i=0; i<args.length; ++i) {
             switch(args[i]) {
                 case "--r": 
-                    ep.executeRunnable(fo.runnableListFiles(Paths.get(searchPath), files), files);
+                    ep.executeRunnable(fo.runnableListFiles(Paths.get(getPrefixValue("--r", args)), files), files);
                 break;
                 case "--c":
-                    ep.executeCallable(fo.getCallableListOfFiles(searchPath));
+                    ep.executeCallable(fo.getCallableListOfFiles(getPrefixValue("--c", args)));
                 break;
                 case "--ec":
-                    ep.executorOfCallable(fo.getCallableListOfFiles(searchPath));
+                    ep.executorOfCallable(fo.getCallableListOfFiles(getPrefixValue("--ec", args)));
                 break;
                 case "--lc":
-                    callables.add(fo.getCallableListOfFiles(searchPath));
-                    callables.add(fo.getCallableListOfDirNames(searchPath));
+                    callables.add(fo.getCallableListOfFiles(getPrefixValue("--lc", args)));
+                    callables.add(fo.getCallableListOfDirNames(getPrefixValue("--lc", args)));
                     ep.executorOfCallableList(callables);
                 break;
                 case "--rfl":
@@ -48,7 +47,6 @@ public class IoModule {
                 }
                 break;
                 case "--h":
-                    console.printf(CONSOLE_FORMAT, "Using the directory | " + searchPath + " |");
                     console.printf(CONSOLE_FORMAT, "Use --r to get the list of files by Runnable");
                     console.printf(CONSOLE_FORMAT, "Use --c to get the list of files by Callable");
                     console.printf(CONSOLE_FORMAT, "Use --ec to get the list of files by Callable in Asynchronous");
@@ -60,5 +58,15 @@ public class IoModule {
                 break;
             }
         }
+    }
+    private static String getPrefixValue(String prefix, String[] args) {
+        for(int i=0; i<args.length; ++i) {
+            if(args[i].equals(prefix) && (i+1) < args.length) {
+                return args[i+1];
+            } else {
+                console.printf(CONSOLE_FORMAT, "Give a path");
+            }
+        }
+        return null;
     }
 }
