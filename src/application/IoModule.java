@@ -1,18 +1,23 @@
-import operations.FileOperations;
-import operations.ExecutorOperation;
+package application;
+
+import application.operations.ExecutorOperation;
+import application.operations.FileOperations;
 
 import java.util.List;
 import java.util.ArrayList;
-
+import java.io.Console;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.concurrent.Callable;
 
 public class IoModule {
+    private static Console console = System.console();
+    private static final String CONSOLE_FORMAT = "%s%n";
+
     public static void main(String[] args) {
         FileOperations fo = new FileOperations();
-        String searchPath = "D:/Descargas/dependencies/mysql-connector-j-9.1.0/";
+        String searchPath = args.length == 1 ? args[0] : "D:/Descargas/dependencies/mysql-connector-j-9.1.0/";
         List<Path> files = new ArrayList<>();
         List<Callable<List<Path>>> callables = new ArrayList<>();
 
@@ -36,22 +41,22 @@ public class IoModule {
                 break;
                 case "--rfl":
                 List<String> r = ep.completionOfCallable(fo.getCallableFileLines("src/application/IoModule.java"));
-                if(r != null && r.size() > 0) {
-                    r
-                    .stream()
-                    .forEach(System.out::println);
+                if(r != null && !r.isEmpty()) {
+                    for(String s: r) {
+                        console.printf(CONSOLE_FORMAT, s);
+                    }
                 }
                 break;
                 case "--h":
-                    System.out.println("Using the directory | " + searchPath + " |");
-                    System.out.println("Use --r to get the list of files by Runnable");
-                    System.out.println("Use --c to get the list of files by Callable");
-                    System.out.println("Use --ec to get the list of files by Callable in Asynchronous");
-                    System.out.println("Use --lc to get the computation of two callables");
-                    System.out.println("Use --rfl to get the file lines of one file");
+                    console.printf(CONSOLE_FORMAT, "Using the directory | " + searchPath + " |");
+                    console.printf(CONSOLE_FORMAT, "Use --r to get the list of files by Runnable");
+                    console.printf(CONSOLE_FORMAT, "Use --c to get the list of files by Callable");
+                    console.printf(CONSOLE_FORMAT, "Use --ec to get the list of files by Callable in Asynchronous");
+                    console.printf(CONSOLE_FORMAT, "Use --lc to get the computation of two callables");
+                    console.printf(CONSOLE_FORMAT, "Use --rfl to get the file lines of one file");
                 break;
                 default: 
-                    System.out.println("use --h for help");
+                    console.printf(CONSOLE_FORMAT, "use --h for help");
                 break;
             }
         }
