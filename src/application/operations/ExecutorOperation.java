@@ -105,11 +105,9 @@ public class ExecutorOperation {
         }
     }
     public<T> T completionOfCallable(Callable<T> task) {
-        // FIXME: search on how to shutdown this process.
-        // apparently use this kind of methods to process a list of Callable tasks.
-        T t = null;
-        CompletionService<T> c = new ExecutorCompletionService<>(Executors.newFixedThreadPool(1));
-        try {
+        // give the completion service a executor thread with try_resource syntax
+        try(ExecutorService executorThread = Executors.newFixedThreadPool(1)) {
+            CompletionService<T> c = new ExecutorCompletionService<>(executorThread);
             Future<T> futureResult = c.submit(task);
             console.printf(CONSOLE_FORMAT, "[Info] Starting computation");
             if(!futureResult.isDone()) {
@@ -117,16 +115,12 @@ public class ExecutorOperation {
                 c.take();
             }
             if(futureResult.isDone()) {
-                t = futureResult.get();
+                return futureResult.get();
             }
         } catch(InterruptedException | ExecutionException e) {
             Thread.currentThread().interrupt();
             e.printStackTrace();
-        } finally {
-            if(c.poll() == null) {
-                c = null;
-            }
         }
-        return t;
+        return null;
     }
 }
